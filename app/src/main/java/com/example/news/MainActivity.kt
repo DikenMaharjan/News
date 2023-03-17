@@ -6,10 +6,14 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import com.example.news.feature_detail.DetailScreen
+import com.example.news.feature_list.ListScreen
+import com.example.news.navigation.routes.DetailRoute
+import com.example.news.navigation.routes.ListRoute
+import com.example.news.navigation.screen
 import com.example.news.ui.theme.NewsTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,27 +23,33 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NewsTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = ListRoute.route
+                    ) {
+                        screen(
+                            screenRoute = ListRoute
+                        ) {
+                            ListScreen(
+                                navigateToDetail = {
+                                    navController.navigate(DetailRoute.route)
+                                }
+                            )
+                        }
+                        screen(
+                            screenRoute = DetailRoute
+                        ) {
+                            DetailScreen()
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    NewsTheme {
-        Greeting("Android")
-    }
-}
