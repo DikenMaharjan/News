@@ -17,14 +17,16 @@ class SafeApiCall @Inject constructor() {
                 if (response.isSuccessful) {
                     Resource.Success(response.body()!!)
                 } else {
-                    Resource.Error(
+                    Resource.Failure.Error(
                         errorResponse = Gson().fromJson(
                             response.errorBody()?.charStream(), ErrorResponse::class.java
                         )
                     )
                 }
             } catch (e: java.lang.Exception) {
-                Resource.UnknownError(e)
+                Resource.Failure.UnknownError(
+                    exception = e
+                )
             }
         }
     }

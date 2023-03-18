@@ -1,7 +1,7 @@
 package com.example.news.data.models.response.fetchnewsresponse
 
 data class ArticleDto(
-    val author: String,
+    val author: String?,
     val content: String,
     val description: String,
     val publishedAt: String,

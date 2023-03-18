@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface ArticlesApi {
 
     @GET("/v2/top-headlines")
-    suspend fun getNews(
+    suspend fun getArticles(
         @Query("country") country: String = "us",
         @Query("page") page: Int = 1,
         @Query("pageSize") pageSize: Int = 20

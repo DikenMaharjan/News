@@ -10,16 +10,16 @@ import androidx.room.PrimaryKey
     ]
 )
 data class ArticleEntity(
-    val author: String,
+    val author: String?,
     val content: String?,
     val description: String,
     val publishedAt: String,
-    val sourceID: String,
+    val sourceID: String?,
     val sourceName: String,
     val title: String,
     val url: String,
     val urlToImage: String
 ) {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     var id: Long = 0L
 }
