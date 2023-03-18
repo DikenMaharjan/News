@@ -8,7 +8,8 @@ fun ArticleDto.toModel() = Article(
     author = this.author,
     content = this.content,
     description = this.description,
-    title = this.title
+    title = this.title,
+    imageURL = this.urlToImage
 )
 
 fun ArticleDto.toEntity() = ArticleEntity(
@@ -27,5 +28,6 @@ fun ArticleEntity.toModel() = Article(
     author = this.author,
     content = this.content,
     description = this.description,
-    title = this.title
+    title = this.title,
+    imageURL = this.urlToImage
 )
