@@ -1,6 +1,6 @@
 package com.example.news.data.repo
 
-import com.example.news.data.models.response.FetchNewsResponse
+import com.example.news.data.models.response.fetchnewsresponse.FetchNewsResponse
 import com.example.news.data.remote.ArticlesApi
 import com.example.news.network.Resource
 import com.example.news.network.SafeApiCall

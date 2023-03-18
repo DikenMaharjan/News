@@ -1,4 +1,4 @@
-package com.example.news.data.models.response
+package com.example.news.data.models.response.fetchnewsresponse
 
 data class ArticleDto(
     val author: String,

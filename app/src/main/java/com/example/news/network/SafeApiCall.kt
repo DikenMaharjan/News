@@ -1,9 +1,10 @@
 package com.example.news.network
 
+import com.example.news.data.models.response.errorresponse.ErrorResponse
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
-import java.io.Reader
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,14 +17,14 @@ class SafeApiCall @Inject constructor() {
                 if (response.isSuccessful) {
                     Resource.Success(response.body()!!)
                 } else {
-                    Resource.Failure(
-                        errorMsg = response.errorBody()?.charStream()?.use(Reader::readText)
-                            ?: "Something went wrong",
-                        exception = null
+                    Resource.Error(
+                        errorResponse = Gson().fromJson(
+                            response.errorBody()?.charStream(), ErrorResponse::class.java
+                        )
                     )
                 }
             } catch (e: java.lang.Exception) {
-                Resource.Failure(e.message ?: "Something went wrong", e)
+                Resource.UnknownError(e)
             }
         }
     }
