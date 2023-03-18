@@ -14,7 +14,7 @@ class ListScreenViewModel @Inject constructor(
     articlesRepository: ArticlesRepository
 ) : ViewModel() {
 
-    val articles = articlesRepository.getArticlesPagingData(
+    val topArticles = articlesRepository.getTopArticlesPagingData(
         pageSize = 30
     ).cachedIn(viewModelScope)
 }

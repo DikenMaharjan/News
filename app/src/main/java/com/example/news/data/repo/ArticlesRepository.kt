@@ -24,7 +24,7 @@ class ArticlesRepository @Inject constructor(
     private val articlesDao: ArticlesDao
 ) {
     @OptIn(ExperimentalPagingApi::class)
-    fun getArticlesPagingData(
+    fun getTopArticlesPagingData(
         pageSize: Int = 30
     ): Flow<PagingData<Article>> {
         return Pager(
@@ -62,7 +62,7 @@ class ArticlesRepository @Inject constructor(
                     LoadType.APPEND -> articlesDao.getArticlesCount() / pageSize + 1
                 }
                 val response = safeApiCall.execute {
-                    articlesApi.getArticles(
+                    articlesApi.getTopArticles(
                         page = page,
                         pageSize = pageSize
                     )
