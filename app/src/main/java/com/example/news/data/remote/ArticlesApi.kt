@@ -15,4 +15,12 @@ interface ArticlesApi {
         @Query("pageSize") pageSize: Int = 20
     ): Response<FetchNewsResponse>
 
+    @GET("/v2/top-headlines")
+    suspend fun getArticlesFromCategory(
+        @Query("category") category: String,
+        @Query("page") page: Int = 1,
+        @Query("pageSize") pageSize: Int = 20
+    ): Response<FetchNewsResponse>
+
+
 }

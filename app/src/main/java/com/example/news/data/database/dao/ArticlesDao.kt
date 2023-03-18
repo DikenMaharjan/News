@@ -7,11 +7,15 @@ import com.example.news.data.models.local.ArticleEntity
 @Dao
 interface ArticlesDao {
 
-    @Query("Select * from ArticleEntity")
-    fun getArticlesPagingSource(): PagingSource<Int, ArticleEntity>
+    @Query("Select * from ArticleEntity where fetchedFor = :fetchedFor")
+    fun getArticlesPagingSource(
+        fetchedFor: String
+    ): PagingSource<Int, ArticleEntity>
 
-    @Query("Select count(*) from ArticleEntity")
-    suspend fun getArticlesCount(): Int
+    @Query("Select count(*) from ArticleEntity where fetchedFor = :fetchedFor")
+    suspend fun getArticlesCount(
+        fetchedFor: String
+    ): Int
 
     @Query("Delete from ArticleEntity")
     suspend fun clear()

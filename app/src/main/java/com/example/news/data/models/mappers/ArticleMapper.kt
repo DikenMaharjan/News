@@ -12,7 +12,7 @@ fun ArticleDto.toModel() = Article(
     imageURL = this.urlToImage
 )
 
-fun ArticleDto.toEntity() = ArticleEntity(
+fun ArticleDto.toEntity(fetchedFor: String) = ArticleEntity(
     author = this.author,
     content = this.content,
     description = this.description,
@@ -21,7 +21,8 @@ fun ArticleDto.toEntity() = ArticleEntity(
     sourceName = this.source.name,
     title = this.title,
     url = this.url,
-    urlToImage = this.urlToImage
+    urlToImage = this.urlToImage,
+    fetchedFor = fetchedFor
 )
 
 fun ArticleEntity.toModel() = Article(

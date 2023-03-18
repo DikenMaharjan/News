@@ -8,6 +8,7 @@ import com.example.news.data.models.mappers.toEntity
 import com.example.news.data.models.mappers.toModel
 import com.example.news.data.models.response.fetchnewsresponse.FetchNewsResponse
 import com.example.news.data.remote.ArticlesApi
+import com.example.news.data.repo.ArticlesRepository.*
 import com.example.news.network.Resource
 import com.example.news.network.SafeApiCall
 import kotlinx.coroutines.flow.Flow
@@ -23,17 +24,38 @@ class ArticlesRepository @Inject constructor(
     private val safeApiCall: SafeApiCall,
     private val articlesDao: ArticlesDao
 ) {
+    enum class AvailableCategories(val title: String) {
+        General("General"),
+        Business("Business"),
+        Entertainment("Entertainment"),
+        Health("Health"),
+        Science("Science"),
+        Sports("Sports"),
+        Technology("Technology")
+    }
+
+    sealed class FetchArticlesFor(val fetchKey: String) {
+        object Top : FetchArticlesFor("Top")
+        class Category(
+            val category: AvailableCategories
+        ) : FetchArticlesFor(category.title)
+    }
+
     @OptIn(ExperimentalPagingApi::class)
-    fun getTopArticlesPagingData(
-        pageSize: Int = 30
+    fun getArticlesPagingData(
+        pageSize: Int = 30,
+        fetchFor: FetchArticlesFor
     ): Flow<PagingData<Article>> {
         return Pager(
             config = PagingConfig(pageSize),
             remoteMediator = getRemoteMediator(
-                pageSize = pageSize
+                pageSize = pageSize,
+                fetchFor = fetchFor
             ),
             pagingSourceFactory = {
-                articlesDao.getArticlesPagingSource()
+                articlesDao.getArticlesPagingSource(
+                    fetchFor.fetchKey
+                )
             }
         ).flow.mapTo {
             it.toModel()
@@ -49,7 +71,8 @@ class ArticlesRepository @Inject constructor(
 
     @OptIn(ExperimentalPagingApi::class)
     private fun getRemoteMediator(
-        pageSize: Int
+        pageSize: Int,
+        fetchFor: FetchArticlesFor
     ): RemoteMediator<Int, ArticleEntity> {
         return object : RemoteMediator<Int, ArticleEntity>() {
             override suspend fun load(
@@ -59,28 +82,56 @@ class ArticlesRepository @Inject constructor(
                 val page = when (loadType) {
                     LoadType.REFRESH -> 1
                     LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
-                    LoadType.APPEND -> articlesDao.getArticlesCount() / pageSize + 1
+                    LoadType.APPEND -> articlesDao.getArticlesCount(
+                        fetchFor.fetchKey
+                    ) / pageSize + 1
                 }
-                val response = safeApiCall.execute {
-                    articlesApi.getTopArticles(
-                        page = page,
-                        pageSize = pageSize
-                    )
-                }
+                val response = getArticles(
+                    fetchFor = fetchFor,
+                    page = page,
+                    pageSize = pageSize
+                )
                 return response.getMediatorResult(
                     loadType = loadType,
                     pageSize = pageSize,
-                    page = page
+                    page = page,
+                    fetchFor = fetchFor
                 )
             }
         }
     }
 
+    private suspend fun getArticles(
+        fetchFor: FetchArticlesFor,
+        page: Int,
+        pageSize: Int
+    ): Resource<FetchNewsResponse> {
+        return safeApiCall.execute {
+            when (fetchFor) {
+                is FetchArticlesFor.Category -> {
+                    articlesApi.getArticlesFromCategory(
+                        category = fetchFor.category.title,
+                        page = page,
+                        pageSize = pageSize
+                    )
+                }
+                FetchArticlesFor.Top -> {
+                    articlesApi.getTopArticles(
+                        page = page,
+                        pageSize = pageSize
+                    )
+                }
+            }
+        }
+    }
+
+
     @OptIn(ExperimentalPagingApi::class)
     private suspend fun Resource<FetchNewsResponse>.getMediatorResult(
         loadType: LoadType,
         page: Int,
-        pageSize: Int
+        pageSize: Int,
+        fetchFor: FetchArticlesFor
     ) = when (this) {
         is Resource.Failure -> RemoteMediator.MediatorResult.Error(
             Exception(this.errorMsg)
@@ -89,9 +140,13 @@ class ArticlesRepository @Inject constructor(
             if (loadType == LoadType.REFRESH) {
                 articlesDao.clear()
             }
-            articlesDao.storeArticles(this.data.articles.map {
-                it.toEntity()
-            })
+            articlesDao.storeArticles(
+                this.data.articles.map {
+                    it.toEntity(
+                        fetchedFor = fetchFor.fetchKey
+                    )
+                }
+            )
             RemoteMediator.MediatorResult.Success(
                 endOfPaginationReached = page * pageSize >= this.data.totalResults
             )

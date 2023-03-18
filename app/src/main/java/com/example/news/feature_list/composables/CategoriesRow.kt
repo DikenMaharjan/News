@@ -10,21 +10,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.news.feature_list.ListScreenViewModel
+import com.example.news.data.repo.ArticlesRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoriesRow(
     modifier: Modifier = Modifier,
-    selectCategory: (ListScreenViewModel.AvailableCategories) -> Unit,
-    selectedCategory: ListScreenViewModel.AvailableCategories
+    selectCategory: (ArticlesRepository.AvailableCategories) -> Unit,
+    selectedCategory: ArticlesRepository.AvailableCategories
 ) {
     Row(
         modifier = modifier
             .padding(vertical = 8.dp)
             .horizontalScroll(rememberScrollState())
     ) {
-        ListScreenViewModel.AvailableCategories.values().forEach {
+        ArticlesRepository.AvailableCategories.values().forEach {
             FilterChip(
                 modifier = Modifier.padding(end = 12.dp), onClick = {
                     selectCategory(it)
