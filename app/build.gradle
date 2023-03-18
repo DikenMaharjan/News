@@ -59,9 +59,8 @@ dependencies {
 
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-
-    //Gson
-    implementation 'com.google.code.gson:gson:2.9.0'
+    // JSON Converter
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     //Hilt
     implementation "com.google.dagger:hilt-android:2.45"
@@ -70,7 +69,7 @@ dependencies {
     //Compose Navigation
     def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-compose:$nav_version"
-
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
