@@ -2,9 +2,13 @@ package com.example.news.feature_list.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -14,9 +18,45 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import com.example.news.data.models.domain.Article
 import com.example.news.ui.theme.DarkColors
+import com.example.news.utils.Shimmer.Shimmer
+
+@Composable
+fun ArticlesRow(
+    articles: LazyPagingItems<Article>
+) {
+    val isLoading by remember {
+        derivedStateOf {
+            articles.loadState.refresh is LoadState.Loading || articles.loadState.source.refresh is LoadState.Loading || articles.loadState.mediator?.refresh is LoadState.Loading
+        }
+    }
+    LazyRow(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 12.dp),
+    ) {
+        if (articles.itemCount == 0 && isLoading) {
+            repeat(5) {
+                item {
+                    ShimmeringTopArticleItem()
+                }
+            }
+        } else {
+            items(articles) { article ->
+                article?.let {
+                    TopArticleItem(
+                        article = article
+                    )
+                }
+            }
+        }
+    }
+}
 
 
 @Composable
@@ -43,12 +83,7 @@ fun TopArticleItem(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            0f to Color.Transparent,
-                            1f to Color.Black
-                        )
-                    )
+                    .gradientOverlay()
             ) {
                 Text(
                     modifier = Modifier
@@ -65,8 +100,30 @@ fun TopArticleItem(
     )
 }
 
+private fun Modifier.gradientOverlay() = this.then(
+    background(
+        Brush.verticalGradient(
+            0f to Color.Transparent,
+            1f to Color.Black
+        )
+    )
+)
+
+
 @Composable
-fun StackLayout(
+private fun ShimmeringTopArticleItem() {
+    Shimmer(
+        modifier = Modifier
+            .padding(end = 12.dp)
+            .height(152.dp)
+            .clip(MaterialTheme.shapes.extraSmall)
+            .aspectRatio(1.7f)
+    )
+
+}
+
+@Composable
+private fun StackLayout(
     modifier: Modifier = Modifier,
     backgroundContent: @Composable () -> Unit,
     foregroundContent: @Composable () -> Unit

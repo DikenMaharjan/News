@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -15,8 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
-import com.example.news.feature_list.composables.TopArticleItem
+import com.example.news.feature_list.composables.ArticlesRow
 
 
 private const val TAG = "ListScreen"
@@ -41,19 +39,7 @@ fun ListScreen(
             )
         }
         item {
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 12.dp),
-            ) {
-                items(topArticles) { article ->
-                    article?.let {
-                        TopArticleItem(
-                            article = article
-                        )
-                    }
-                }
-            }
+            ArticlesRow(articles = topArticles)
         }
 
         item {
