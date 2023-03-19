@@ -1,10 +1,7 @@
 package com.example.news.feature_list
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -19,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
@@ -58,37 +56,53 @@ fun ListScreen(
             .fillMaxSize()
             .pullRefresh(state)
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(12.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
         ) {
-            item {
-                Text(
-                    text = "Top News",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            item {
-                TopArticles(articles = topArticles)
-            }
+            LazyColumn(
+                contentPadding = PaddingValues(12.dp),
+                modifier = Modifier.weight(1f)
+            ) {
+                item {
+                    Text(
+                        text = "Top News",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                item {
+                    TopArticles(articles = topArticles)
+                }
 
-            item {
-                Text(
-                    text = "Categories",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 48.dp)
-                )
-            }
+                item {
+                    Text(
+                        text = "Categories",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 48.dp)
+                    )
+                }
 
-            stickyHeader {
-                CategoriesRow(
-                    selectCategory = viewModel::selectCategory,
-                    selectedCategory = viewModel.selectedCategory
+                stickyHeader {
+                    CategoriesRow(
+                        selectCategory = viewModel::selectCategory,
+                        selectedCategory = viewModel.selectedCategory
+                    )
+                }
+                categoryArticles(articles = categoryArticles)
+            }
+            val mediatorStateCategoryArticles = categoryArticles.loadState.mediator?.refresh
+            if (mediatorStateCategoryArticles is LoadState.Error) {
+                Text(
+                    text = mediatorStateCategoryArticles.error.message ?: "Something went wrong",
+                    modifier = Modifier
+                        .fillMaxWidth().padding(8.dp),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.error
                 )
             }
-            categoryArticles(articles = categoryArticles)
         }
         PullRefreshIndicator(
             refreshing = showPullRefresh, state = state, modifier = Modifier.align(
