@@ -70,7 +70,7 @@ fun TopArticles(
                 text = mediatorRefreshState.error.message ?: "Something went wrong",
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier
-                    .fillMaxWidth().padding(8.dp),
+                    .fillMaxWidth().padding(24.dp),
                 style = MaterialTheme.typography.labelSmall,
                 textAlign = TextAlign.Center
             )

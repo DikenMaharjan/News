@@ -99,7 +99,7 @@ fun ListScreen(
                     text = mediatorStateCategoryArticles.error.message ?: "Something went wrong",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
+                        .padding(24.dp),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.error
