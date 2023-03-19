@@ -79,7 +79,7 @@ fun ListScreen(
                 )
             }
 
-            item {
+            stickyHeader {
                 CategoriesRow(
                     selectCategory = viewModel::selectCategory,
                     selectedCategory = viewModel.selectedCategory
