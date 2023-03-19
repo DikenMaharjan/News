@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -19,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.news.data.models.domain.Article
+import com.example.news.utils.date.getUploadedAgoText
+import com.example.news.utils.date.toOffsetDateTime
 import com.example.news.utils.image.TemporaryImageURL
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,22 +64,33 @@ fun ArticleDetail(modifier: Modifier = Modifier, article: Article) {
             .verticalScroll(rememberScrollState())
     ) {
         Text(text = article.title, style = MaterialTheme.typography.headlineSmall)
-        article.author?.let {
-            Text(
-                text = "-By $it",
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Light,
-                modifier = Modifier.align(Alignment.End)
-            )
-        }
+
         AsyncImage(
             model = article.imageURL ?: TemporaryImageURL,
             contentDescription = "Article Thumbnail",
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .padding(vertical = 8.dp)
+                .clip(MaterialTheme.shapes.extraSmall),
             contentScale = ContentScale.FillWidth
         )
+        Box(modifier = Modifier.fillMaxWidth()) {
+            article.author?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Light,
+                    modifier = Modifier.align(Alignment.CenterStart)
+                )
+            }
+            Text(
+                text = article.publishedAt.toOffsetDateTime().getUploadedAgoText(),
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.Light,
+                modifier = Modifier.align(Alignment.CenterEnd)
+            )
+        }
+        Divider(modifier = Modifier.padding(top = 8.dp))
 
         article.content?.let { content ->
             Text(

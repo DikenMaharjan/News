@@ -29,6 +29,9 @@ android {
         }
     }
     compileOptions {
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -77,6 +80,10 @@ dependencies {
 
     // Room
     def room_version = "2.5.0"
+
+    // Support java 8 features.
+    // https://developer.android.com/studio/write/java8-support
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
 
     // Coil
     implementation "io.coil-kt:coil-compose:2.2.2"
