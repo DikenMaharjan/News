@@ -43,7 +43,6 @@ fun ListScreen(
         }
     }
 
-
     val state = rememberPullRefreshState(
         refreshing = loading,
         onRefresh = {
@@ -94,7 +93,7 @@ fun ListScreen(
                         selectedCategory = viewModel.selectedCategory
                     )
                 }
-                categoryArticles(articles = categoryArticles)
+                categoryArticles(articles = categoryArticles, onArticleClick = navigateToDetail)
             }
             val mediatorStateCategoryArticles = categoryArticles.loadState.mediator?.refresh
             if (mediatorStateCategoryArticles is LoadState.Error) {

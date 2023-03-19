@@ -1,6 +1,7 @@
 package com.example.news.feature_list.composables
 
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +24,8 @@ import com.example.news.utils.shimmer.Shimmer
 import kotlin.random.Random
 
 fun LazyListScope.categoryArticles(
-    articles: LazyPagingItems<Article>
+    articles: LazyPagingItems<Article>,
+    onArticleClick: (articleID: Long) -> Unit
 ) {
     if (articles.itemCount == 0) {
         val mediatorRefreshState = articles.loadState.mediator?.refresh
@@ -38,7 +40,9 @@ fun LazyListScope.categoryArticles(
             item {
                 Text(
                     text = "No news at the moment",
-                    modifier = Modifier.fillParentMaxWidth().padding(top = 48.dp),
+                    modifier = Modifier
+                        .fillParentMaxWidth()
+                        .padding(top = 48.dp),
                     textAlign = TextAlign.Center
                 )
             }
@@ -46,7 +50,10 @@ fun LazyListScope.categoryArticles(
     } else {
         items(articles) { article ->
             if (article != null) {
-                CategoryArticleItem(article = article)
+                CategoryArticleItem(
+                    article = article,
+                    onArticleClick = onArticleClick
+                )
             }
         }
     }
@@ -55,10 +62,15 @@ fun LazyListScope.categoryArticles(
 @Composable
 fun CategoryArticleItem(
     modifier: Modifier = Modifier,
-    article: Article
+    article: Article,
+    onArticleClick: (articleID: Long) -> Unit
 ) {
     Row(
-        modifier = modifier.padding(12.dp),
+        modifier = modifier
+            .clickable {
+                onArticleClick(article.id)
+            }
+            .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
