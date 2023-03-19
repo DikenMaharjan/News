@@ -90,7 +90,7 @@ fun CategoryArticleItem(
             .clickable {
                 onArticleClick(article)
             }
-            .padding(12.dp),
+            .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
