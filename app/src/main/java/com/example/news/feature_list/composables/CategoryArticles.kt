@@ -4,6 +4,7 @@ package com.example.news.feature_list.composables
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,6 +57,25 @@ fun LazyListScope.categoryArticles(
                 )
             }
         }
+    }
+    when (val appendState = articles.loadState.append) {
+        is LoadState.Error -> item {
+            Text(
+                text = appendState.error.message ?: "Something went wrong",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+        LoadState.Loading -> item {
+            Box(modifier = Modifier.fillParentMaxWidth()) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(18.dp)
+                        .align(Alignment.Center)
+                )
+            }
+        }
+        is LoadState.NotLoading -> {}
     }
 }
 

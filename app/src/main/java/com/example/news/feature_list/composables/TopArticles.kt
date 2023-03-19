@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,7 +41,9 @@ fun TopArticles(
     ) {
         val mediatorRefreshState = articles.loadState.mediator?.refresh
         val sourceRefreshState = articles.loadState.source.refresh
-        LazyRow {
+        LazyRow(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             if (articles.itemCount == 0) {
                 if (mediatorRefreshState is LoadState.Loading) {
                     repeat(5) {
@@ -61,8 +64,18 @@ fun TopArticles(
                 items(articles) { article ->
                     article?.let {
                         TopArticleItem(
-                            article = article,
-                            onArticleClick = onArticleClick
+                            article = article, onArticleClick = onArticleClick
+                        )
+                    }
+                }
+            }
+            if (articles.loadState.append is LoadState.Loading) {
+                item {
+                    Box(modifier = Modifier.fillParentMaxWidth()) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .size(18.dp)
+                                .align(Alignment.Center)
                         )
                     }
                 }
@@ -85,54 +98,46 @@ fun TopArticles(
 
 @Composable
 fun TopArticleItem(
-    modifier: Modifier = Modifier,
-    article: Article,
-    onArticleClick: (article: Article) -> Unit
+    modifier: Modifier = Modifier, article: Article, onArticleClick: (article: Article) -> Unit
 ) {
-    StackLayout(
-        modifier = modifier
-            .padding(end = 12.dp)
-            .height(152.dp)
-            .fillMaxHeight()
-            .clip(MaterialTheme.shapes.extraSmall)
-            .clickable {
-                onArticleClick(article)
-            },
-        backgroundContent = {
-            AsyncImage(
-                model = article.imageURL,
-                contentScale = ContentScale.FillHeight,
-                contentDescription = "ArticleImage",
+    StackLayout(modifier = modifier
+        .padding(end = 12.dp)
+        .height(152.dp)
+        .fillMaxHeight()
+        .clip(MaterialTheme.shapes.extraSmall)
+        .clickable {
+            onArticleClick(article)
+        }, backgroundContent = {
+        AsyncImage(
+            model = article.imageURL,
+            contentScale = ContentScale.FillHeight,
+            contentDescription = "ArticleImage",
+            modifier = Modifier.fillMaxWidth()
+        )
+    }, foregroundContent = {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .gradientOverlay()
+        ) {
+            Text(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(14.dp),
+                text = article.title,
+                color = DarkColors.onBackground,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.titleMedium
             )
-        },
-        foregroundContent = {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .gradientOverlay()
-            ) {
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(14.dp),
-                    text = article.title,
-                    color = DarkColors.onBackground,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
         }
-    )
+
+    })
 }
 
 private fun Modifier.gradientOverlay() = this.then(
     background(
         Brush.verticalGradient(
-            0f to Color.Transparent,
-            1f to Color.Black
+            0f to Color.Transparent, 1f to Color.Black
         )
     )
 )
@@ -156,13 +161,10 @@ private fun StackLayout(
     backgroundContent: @Composable () -> Unit,
     foregroundContent: @Composable () -> Unit
 ) {
-    Layout(
-        modifier = modifier,
-        content = {
-            backgroundContent()
-            foregroundContent()
-        }
-    ) { measurables, constraints ->
+    Layout(modifier = modifier, content = {
+        backgroundContent()
+        foregroundContent()
+    }) { measurables, constraints ->
         val firstPlaceable = measurables[0].measure(constraints)
         val secondPlaceable = measurables[1].measure(
             constraints.copy(

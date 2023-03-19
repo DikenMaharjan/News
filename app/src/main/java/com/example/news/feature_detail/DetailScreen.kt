@@ -48,7 +48,7 @@ fun DetailScreen(
             ArticleDetail(
                 modifier = modifier
                     .weight(1f)
-                    .padding(24.dp),
+                    .padding(horizontal = 24.dp),
                 article = article
             )
         }
