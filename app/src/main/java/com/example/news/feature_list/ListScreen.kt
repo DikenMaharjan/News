@@ -84,7 +84,7 @@ fun ListScreen(
                         text = "Categories",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(top = 48.dp)
+                        modifier = Modifier.padding(top = 24.dp)
                     )
                 }
 
