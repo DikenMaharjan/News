@@ -8,10 +8,7 @@ data class ArticleEntity(
     val fetchedFor: String,
     val author: String?,
     val content: String?,
-    val description: String?,
     val publishedAt: String,
-    val sourceID: String?,
-    val sourceName: String,
     val title: String,
     val url: String,
     val urlToImage: String?
