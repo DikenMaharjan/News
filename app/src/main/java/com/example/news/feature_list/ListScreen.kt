@@ -1,5 +1,6 @@
 package com.example.news.feature_list
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,13 +23,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.news.feature_list.composables.TopArticles
 import com.example.news.feature_list.composables.CategoriesRow
+import com.example.news.feature_list.composables.TopArticles
+import com.example.news.feature_list.composables.categoryArticles
 
 
 private const val TAG = "ListScreen"
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun ListScreen(
     modifier: Modifier = Modifier,
@@ -36,6 +38,7 @@ fun ListScreen(
     navigateToDetail: () -> Unit,
 ) {
     val topArticles = viewModel.topArticles.collectAsLazyPagingItems()
+    val categoryArticles = viewModel.categoryArticles.collectAsLazyPagingItems()
 
     val showPullRefresh by remember {
         derivedStateOf {
@@ -82,6 +85,7 @@ fun ListScreen(
                     selectedCategory = viewModel.selectedCategory
                 )
             }
+            categoryArticles(articles = categoryArticles)
         }
         PullRefreshIndicator(
             refreshing = showPullRefresh, state = state, modifier = Modifier.align(
