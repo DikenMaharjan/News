@@ -23,6 +23,9 @@ class ListScreenViewModel @Inject constructor(
     var selectedCategory by mutableStateOf(ArticlesRepository.AvailableCategories.General)
         private set
 
+    var showRefresh by mutableStateOf(false)
+        private set
+
     private val categoryArticlesMap =
         mutableMapOf<ArticlesRepository.AvailableCategories, Flow<PagingData<Article>>>()
 
@@ -44,5 +47,9 @@ class ListScreenViewModel @Inject constructor(
 
     fun selectCategory(category: ArticlesRepository.AvailableCategories) {
         selectedCategory = category
+    }
+
+    fun changeShowRefresh(show: Boolean) {
+        showRefresh = show
     }
 }

@@ -37,18 +37,19 @@ fun ListScreen(
 ) {
     val topArticles = viewModel.topArticles.collectAsLazyPagingItems()
     val categoryArticles = viewModel.categoryArticles.collectAsLazyPagingItems()
-
-    val showPullRefresh by remember {
+    val loading by remember {
         derivedStateOf {
-            topArticles.loadState.refresh is LoadState.Loading
+            topArticles.loadState.refresh is LoadState.Loading && viewModel.showRefresh
         }
     }
 
+
     val state = rememberPullRefreshState(
-        refreshing = showPullRefresh,
+        refreshing = loading,
         onRefresh = {
             topArticles.refresh()
             categoryArticles.refresh()
+            viewModel.changeShowRefresh(true)
         }
     )
     Box(
@@ -97,7 +98,8 @@ fun ListScreen(
                 Text(
                     text = mediatorStateCategoryArticles.error.message ?: "Something went wrong",
                     modifier = Modifier
-                        .fillMaxWidth().padding(8.dp),
+                        .fillMaxWidth()
+                        .padding(8.dp),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.error
@@ -105,7 +107,7 @@ fun ListScreen(
             }
         }
         PullRefreshIndicator(
-            refreshing = showPullRefresh, state = state, modifier = Modifier.align(
+            refreshing = loading, state = state, modifier = Modifier.align(
                 Alignment.TopCenter
             )
         )
