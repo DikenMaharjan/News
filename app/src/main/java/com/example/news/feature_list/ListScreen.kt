@@ -48,7 +48,10 @@ fun ListScreen(
 
     val state = rememberPullRefreshState(
         refreshing = showPullRefresh,
-        onRefresh = topArticles::refresh
+        onRefresh = {
+            topArticles.refresh()
+            categoryArticles.refresh()
+        }
     )
     Box(
         modifier = modifier
