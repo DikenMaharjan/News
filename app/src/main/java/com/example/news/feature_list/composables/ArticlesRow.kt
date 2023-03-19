@@ -24,7 +24,7 @@ import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import com.example.news.data.models.domain.Article
 import com.example.news.ui.theme.DarkColors
-import com.example.news.utils.Shimmer.Shimmer
+import com.example.news.utils.shimmer.Shimmer
 
 @Composable
 fun ArticlesRow(

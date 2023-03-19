@@ -1,4 +1,4 @@
-package com.example.news.utils.Shimmer
+package com.example.news.utils.shimmer
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
