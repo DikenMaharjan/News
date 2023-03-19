@@ -138,7 +138,7 @@ class ArticlesRepository @Inject constructor(
         )
         is Resource.Success -> {
             if (loadType == LoadType.REFRESH) {
-                articlesDao.clear()
+                articlesDao.deleteArticlesFetchedFor(fetchedFor = fetchFor.fetchKey)
             }
             articlesDao.storeArticles(
                 this.data.articles.map {

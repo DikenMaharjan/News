@@ -17,8 +17,8 @@ interface ArticlesDao {
         fetchedFor: String
     ): Int
 
-    @Query("Delete from ArticleEntity")
-    suspend fun clear()
+    @Query("Delete from ArticleEntity where fetchedFor = :fetchedFor")
+    suspend fun deleteArticlesFetchedFor(fetchedFor: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun storeArticles(articles: List<ArticleEntity>)
