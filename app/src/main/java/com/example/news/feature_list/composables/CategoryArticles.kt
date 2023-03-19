@@ -25,7 +25,7 @@ import kotlin.random.Random
 
 fun LazyListScope.categoryArticles(
     articles: LazyPagingItems<Article>,
-    onArticleClick: (articleID: Long) -> Unit
+    onArticleClick: (article: Article) -> Unit
 ) {
     if (articles.itemCount == 0) {
         val mediatorRefreshState = articles.loadState.mediator?.refresh
@@ -63,12 +63,12 @@ fun LazyListScope.categoryArticles(
 fun CategoryArticleItem(
     modifier: Modifier = Modifier,
     article: Article,
-    onArticleClick: (articleID: Long) -> Unit
+    onArticleClick: (article: Article) -> Unit
 ) {
     Row(
         modifier = modifier
             .clickable {
-                onArticleClick(article.id)
+                onArticleClick(article)
             }
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically

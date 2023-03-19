@@ -41,6 +41,12 @@ class ArticlesRepository @Inject constructor(
         ) : FetchArticlesFor(category.title)
     }
 
+    fun getArticleFlow(articleURL: String): Flow<Article?> {
+        return articlesDao.getArticle(articleURL).map {
+            it?.toModel()
+        }
+    }
+
     @OptIn(ExperimentalPagingApi::class)
     fun getArticlesPagingData(
         pageSize: Int = 30,

@@ -31,7 +31,7 @@ private const val TAG = "TopArticles"
 fun TopArticles(
     modifier: Modifier = Modifier,
     articles: LazyPagingItems<Article>,
-    onArticleClick: (articleID: Long) -> Unit
+    onArticleClick: (article: Article) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -87,7 +87,7 @@ fun TopArticles(
 fun TopArticleItem(
     modifier: Modifier = Modifier,
     article: Article,
-    onArticleClick: (articleID: Long) -> Unit
+    onArticleClick: (article: Article) -> Unit
 ) {
     StackLayout(
         modifier = modifier
@@ -96,7 +96,7 @@ fun TopArticleItem(
             .fillMaxHeight()
             .clip(MaterialTheme.shapes.extraSmall)
             .clickable {
-                onArticleClick(article.id)
+                onArticleClick(article)
             },
         backgroundContent = {
             AsyncImage(

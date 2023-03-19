@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.news.data.models.domain.Article
 import com.example.news.feature_list.composables.CategoriesRow
 import com.example.news.feature_list.composables.TopArticles
 import com.example.news.feature_list.composables.categoryArticles
@@ -33,7 +34,7 @@ private const val TAG = "ListScreen"
 fun ListScreen(
     modifier: Modifier = Modifier,
     viewModel: ListScreenViewModel = hiltViewModel(),
-    navigateToDetail: (articleID: Long) -> Unit,
+    navigateToDetail: (article: Article) -> Unit,
 ) {
     val topArticles = viewModel.topArticles.collectAsLazyPagingItems()
     val categoryArticles = viewModel.categoryArticles.collectAsLazyPagingItems()

@@ -32,9 +32,9 @@ fun MainContent(
                 screenRoute = ListRoute
             ) {
                 ListScreen(
-                    navigateToDetail = { articleID ->
+                    navigateToDetail = { article ->
                         navController.navigate(
-                            DetailRoute.createNavigationRoute(articleID)
+                            DetailRoute.createNavigationRoute(article.url)
                         )
                     }
                 )

@@ -20,9 +20,7 @@ fun ArticleDto.toEntity(fetchedFor: String) = ArticleEntity(
 
 fun ArticleEntity.toModel() = Article(
     author = this.author,
-    content = this.content,
-    description = this.description,
     title = this.title,
     imageURL = this.urlToImage,
-    id = this.id
+    url = this.url
 )
