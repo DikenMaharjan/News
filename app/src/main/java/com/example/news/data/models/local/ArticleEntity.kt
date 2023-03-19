@@ -1,14 +1,9 @@
 package com.example.news.data.models.local
 
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(
-    indices = [
-        Index("url", unique = true)
-    ]
-)
+@Entity
 data class ArticleEntity(
     val fetchedFor: String,
     val author: String?,
