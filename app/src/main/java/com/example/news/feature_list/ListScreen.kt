@@ -33,7 +33,7 @@ private const val TAG = "ListScreen"
 fun ListScreen(
     modifier: Modifier = Modifier,
     viewModel: ListScreenViewModel = hiltViewModel(),
-    navigateToDetail: () -> Unit,
+    navigateToDetail: (articleID: Long) -> Unit,
 ) {
     val topArticles = viewModel.topArticles.collectAsLazyPagingItems()
     val categoryArticles = viewModel.categoryArticles.collectAsLazyPagingItems()
@@ -73,7 +73,10 @@ fun ListScreen(
                     )
                 }
                 item {
-                    TopArticles(articles = topArticles)
+                    TopArticles(
+                        articles = topArticles,
+                        onArticleClick = navigateToDetail
+                    )
                 }
 
                 item {

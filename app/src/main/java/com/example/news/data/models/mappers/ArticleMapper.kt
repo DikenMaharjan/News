@@ -4,13 +4,6 @@ import com.example.news.data.models.domain.Article
 import com.example.news.data.models.local.ArticleEntity
 import com.example.news.data.models.response.fetchnewsresponse.ArticleDto
 
-fun ArticleDto.toModel() = Article(
-    author = this.author,
-    content = this.content,
-    description = this.description,
-    title = this.title,
-    imageURL = this.urlToImage
-)
 
 fun ArticleDto.toEntity(fetchedFor: String) = ArticleEntity(
     author = this.author,
@@ -30,5 +23,6 @@ fun ArticleEntity.toModel() = Article(
     content = this.content,
     description = this.description,
     title = this.title,
-    imageURL = this.urlToImage
+    imageURL = this.urlToImage,
+    id = this.id
 )

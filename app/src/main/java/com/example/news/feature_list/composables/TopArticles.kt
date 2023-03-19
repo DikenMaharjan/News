@@ -1,6 +1,7 @@
 package com.example.news.feature_list.composables
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.MaterialTheme
@@ -29,7 +30,8 @@ private const val TAG = "TopArticles"
 @Composable
 fun TopArticles(
     modifier: Modifier = Modifier,
-    articles: LazyPagingItems<Article>
+    articles: LazyPagingItems<Article>,
+    onArticleClick: (articleID: Long) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -59,7 +61,8 @@ fun TopArticles(
                 items(articles) { article ->
                     article?.let {
                         TopArticleItem(
-                            article = article
+                            article = article,
+                            onArticleClick = onArticleClick
                         )
                     }
                 }
@@ -70,7 +73,8 @@ fun TopArticles(
                 text = mediatorRefreshState.error.message ?: "Something went wrong",
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier
-                    .fillMaxWidth().padding(24.dp),
+                    .fillMaxWidth()
+                    .padding(24.dp),
                 style = MaterialTheme.typography.labelSmall,
                 textAlign = TextAlign.Center
             )
@@ -82,14 +86,18 @@ fun TopArticles(
 @Composable
 fun TopArticleItem(
     modifier: Modifier = Modifier,
-    article: Article
+    article: Article,
+    onArticleClick: (articleID: Long) -> Unit
 ) {
     StackLayout(
         modifier = modifier
             .padding(end = 12.dp)
             .height(152.dp)
             .fillMaxHeight()
-            .clip(MaterialTheme.shapes.extraSmall),
+            .clip(MaterialTheme.shapes.extraSmall)
+            .clickable {
+                onArticleClick(article.id)
+            },
         backgroundContent = {
             AsyncImage(
                 model = article.imageURL,
