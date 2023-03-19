@@ -22,5 +22,9 @@ fun ArticleEntity.toModel() = Article(
     author = this.author,
     title = this.title,
     imageURL = this.urlToImage,
-    url = this.url
+    url = this.url,
+    content = this.content,
+    description = this.description,
+    publishedAt = this.publishedAt,
+    sourceName = this.sourceName
 )

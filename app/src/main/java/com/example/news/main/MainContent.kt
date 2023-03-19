@@ -42,7 +42,9 @@ fun MainContent(
             screen(
                 screenRoute = DetailRoute
             ) {
-                DetailScreen()
+                DetailScreen(
+                    popBackStack = navController::popBackStack
+                )
             }
         }
     }
