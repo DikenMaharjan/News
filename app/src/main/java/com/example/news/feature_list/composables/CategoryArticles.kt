@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -26,11 +27,20 @@ fun LazyListScope.categoryArticles(
 ) {
     if (articles.itemCount == 0) {
         val mediatorRefreshState = articles.loadState.mediator?.refresh
+        val sourceRefreshState = articles.loadState.source.refresh
         if (mediatorRefreshState is LoadState.Loading) {
             repeat(15) {
                 item {
                     ShimmeringCategoryArticle()
                 }
+            }
+        } else if (sourceRefreshState is LoadState.NotLoading && mediatorRefreshState is LoadState.NotLoading) {
+            item {
+                Text(
+                    text = "No news at the moment",
+                    modifier = Modifier.fillParentMaxWidth().padding(top = 48.dp),
+                    textAlign = TextAlign.Center
+                )
             }
         }
     } else {
