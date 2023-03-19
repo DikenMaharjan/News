@@ -24,6 +24,7 @@ class ArticlesRepository @Inject constructor(
     private val safeApiCall: SafeApiCall,
     private val articlesDao: ArticlesDao
 ) {
+    // These are the categories available in the API
     enum class AvailableCategories(val title: String) {
         General("General"),
         Business("Business"),
