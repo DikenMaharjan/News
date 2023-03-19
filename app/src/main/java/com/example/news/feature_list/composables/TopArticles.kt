@@ -27,7 +27,7 @@ import com.example.news.ui.theme.DarkColors
 import com.example.news.utils.shimmer.Shimmer
 
 @Composable
-fun ArticlesRow(
+fun TopArticles(
     articles: LazyPagingItems<Article>
 ) {
     val isLoading by remember {

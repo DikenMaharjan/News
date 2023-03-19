@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.news.feature_list.composables.ArticlesRow
+import com.example.news.feature_list.composables.TopArticles
 import com.example.news.feature_list.composables.CategoriesRow
 
 
@@ -64,7 +64,7 @@ fun ListScreen(
                 )
             }
             item {
-                ArticlesRow(articles = topArticles)
+                TopArticles(articles = topArticles)
             }
 
             item {
