@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import kotlin.random.Random
 
@@ -35,7 +36,9 @@ private fun Modifier.shimmer() = composed {
         progress to MaterialTheme.colorScheme.surfaceTint.copy(alpha = 0.1f),
         1f to MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
     )
-    background(
+    clip(
+        MaterialTheme.shapes.extraSmall
+    ).background(
         brush = brush
     )
 }
